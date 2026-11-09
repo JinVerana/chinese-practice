@@ -23,11 +23,11 @@
 'use strict';
 const questions = [
  {before:'我',after:'游泳。',cue:'我上過游泳課，已經學會了。',answer:'會',explain:'這裡要說「學過，知道怎麼做」，所以選「會」。'},
- {before:'天氣預報說，明天',after:'下雨。',cue:'這裡要說明天可能發生的事。',answer:'會',explain:'這裡是在預測明天的天氣，所以選「會」。'},
- {before:'我明天不用上班，',after:'跟你一起去。',cue:'這裡要說我明天有時間。',answer:'能',explain:'不用上班，有時間一起去，條件允許，所以選「能」。'},
- {before:'我今天生病了，不',after:'去上課。',cue:'這裡要說身體不舒服，沒辦法去。',answer:'能',explain:'身體不舒服，今天的條件不允許，所以說「不能去上課」。'},
- {before:'作業不多，我十分鐘就',after:'寫完。',cue:'這裡要說我有能力在十分鐘內完成。',answer:'能',explain:'這裡強調在十分鐘內做得到，所以選「能」。'},
- {before:'她學了兩年中文，現在',after:'說中文了。',cue:'這裡要說她學過，知道怎麼說。',answer:'會',explain:'這裡強調學過中文、學會了，所以選「會」。'}
+ {before:'天氣預報說，明天',after:'下雨。',cue:'這裡要說的是「明天可能發生的事」。',answer:'會',explain:'這裡是在「預測明天的天氣」，所以選「會」。'},
+ {before:'我明天不用上班，',after:'跟你一起去。',cue:'這裡要說的是「我明天有時間」。',answer:'能',explain:'不用上班，有時間一起去，條件允許，所以選「能」。'},
+ {before:'我今天生病了，不',after:'去上課。',cue:'這裡要說的是「身體不舒服，沒辦法去」。',answer:'能',explain:'身體不舒服，今天的條件不允許，所以說「不能去上課」。'},
+ {before:'作業不多，我十分鐘就',after:'寫完。',cue:'這裡要說的是「我有能力在十分鐘內完成」。',answer:'能',explain:'這裡強調在十分鐘內做得到，所以選「能」。'},
+ {before:'她學了兩年中文，現在',after:'說中文了。',cue:'這裡要說的是「她學過，知道怎麼說」。',answer:'會',explain:'這裡強調學過中文、學會了，所以選「會」。'}
 ];
 const answers = Array(questions.length).fill(null);
 const form = document.getElementById('quiz');
