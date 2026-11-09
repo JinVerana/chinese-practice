@@ -1,0 +1,85 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="color-scheme" content="light">
+<title>會，還是能？｜A2 中文小練習</title>
+<style>
+:root{--ink:#213e3a;--muted:#526762;--green:#246b59;--line:#d6e0d8;--paper:#fffefa;--soft:#eef4ec;--red:#9e3831}
+*{box-sizing:border-box}body{margin:0;background:#f2f1e9;color:var(--ink);font-family:system-ui,-apple-system,"PingFang TC","Microsoft JhengHei",sans-serif;line-height:1.8}main{max-width:850px;margin:auto;padding:46px 22px 60px}.eyebrow{font-size:.8rem;font-weight:700;letter-spacing:.13em;color:var(--green)}h1{font-size:clamp(2.3rem,7vw,3.5rem);line-height:1.3;margin:12px 0}h1 span{color:var(--green)}.intro{color:var(--muted);margin:0 0 28px}h2{font-size:1.25rem;margin:0 0 12px}.guide{padding:26px;background:var(--paper);border:1px solid var(--line);border-radius:20px}.rules{display:grid;grid-template-columns:1fr 1fr;gap:20px}.rule strong{display:block;font-size:1.5rem}.rule p{margin:5px 0}.example{font-size:.95rem;color:var(--muted)}.note{font-size:.9rem;border-top:1px solid var(--line);margin:18px 0 0;padding-top:16px}.practice-head{display:flex;justify-content:space-between;align-items:center;gap:12px;margin:32px 0 10px}.practice-head h2{margin:0}.count{font-size:.85rem;color:var(--muted)}.instructions{margin:0 0 18px;color:var(--muted)}fieldset{min-width:0;margin:0 0 16px;border:1px solid var(--line);border-radius:16px;background:var(--paper);padding:18px 22px 20px}legend{font-size:.83rem;font-weight:700;background:var(--paper);padding:0 8px;color:var(--muted)}.sentence{font-size:1.16rem;font-weight:600;margin:0 0 5px}.blank{display:inline-block;min-width:2.4em;text-align:center;border-bottom:2px solid var(--green);color:var(--green);margin:0 4px}.cue{font-size:.92rem;color:var(--muted);margin:0 0 14px}.choices{display:flex;gap:12px}.choice{position:relative;cursor:pointer;display:flex;gap:10px;align-items:center;min-width:100px;border:1px solid var(--line);border-radius:10px;padding:9px 22px;font-size:1.15rem;background:white}.choice:has(input:checked){border-color:var(--green);background:var(--soft);box-shadow:0 0 0 1px var(--green)}input{width:18px;height:18px;accent-color:var(--green);margin:0}.choice:focus-within{outline:3px solid #d69d38;outline-offset:3px}.feedback{margin:14px 0 0;padding:11px 14px;border-radius:9px;font-size:.95rem;background:var(--soft)}.feedback[hidden]{display:none}.feedback.wrong{background:#fff0eb;color:var(--red)}.feedback.pending{background:#fff4db;color:#75500c}.feedback strong{display:block}.scoreboard{margin-top:24px;padding:23px 24px;background:var(--ink);color:white;border-radius:16px}.score{font-size:1.5rem;font-weight:700;margin:0}.scoreboard .message{font-size:.95rem;margin:3px 0 0;color:#e0ebe4}.actions{display:flex;flex-wrap:wrap;gap:12px;margin-top:18px}button{font:inherit;font-weight:650;padding:11px 22px;border-radius:10px;cursor:pointer;border:1px solid var(--green);min-height:48px}button.primary{background:var(--green);color:white}button.secondary{background:transparent;color:var(--green)}button:hover{filter:brightness(.94)}button:focus-visible{outline:3px solid #d69d38;outline-offset:4px}footer{font-size:.83rem;color:var(--muted);margin-top:24px}.nojs{padding:20px;background:#fff0eb;color:var(--red)}
+@media(max-width:560px){main{padding:28px 16px 40px}.rules{grid-template-columns:1fr;gap:14px}.rule+.rule{border-top:1px solid var(--line);padding-top:14px}.guide{padding:20px}fieldset{padding:14px 16px 18px}.choice{flex:1;justify-content:center}.practice-head{align-items:baseline}.scoreboard{padding:20px}.actions button{flex:1;padding:11px 16px}}@media(prefers-reduced-motion:no-preference){button,.choice{transition:background .15s}}
+</style>
+</head>
+<body>
+<main>
+<header><div class="eyebrow">A2 中文 · 語法練習</div><h1>「會」，還是<span>「能」</span>？</h1><p class="intro">讀一讀，選一選。用六道題目，練習說出不同的意思。</p></header>
+<section class="guide" aria-labelledby="guide-title"><h2 id="guide-title">先記住這個小方法</h2><div class="rules"><div class="rule"><strong>會 huì</strong><p>學過，知道怎麼做；<br>或認為一件事將發生。</p><p class="example">我<strong>會</strong>開車。（我學過。）<br>他明天<strong>會</strong>來。（我認為他要來。）</p></div><div class="rule"><strong>能 néng</strong><p>有能力、時間，<br>或現在的條件允許。</p><p class="example">我今天<strong>能</strong>開車。（今天身體沒問題。）<br>他明天<strong>能</strong>來。（他有時間。）</p></div></div><p class="note">有些句子用「會」或「能」都可以，但意思不同。下面請依照<strong>括號裡的意思</strong>，選出最適合的答案。</p></section>
+<noscript><p class="nojs">請開啟瀏覽器的 JavaScript 功能，才能作答和檢查答案。</p></noscript>
+<section aria-labelledby="practice-title"><div class="practice-head"><h2 id="practice-title">換你試試看</h2><span class="count">共 6 題 · 每題 1 分</span></div><p class="instructions">選「會」或「能」，馬上看答案與解釋。也可以改選，再試一次。</p><form id="quiz" autocomplete="off"><div id="questions"></div><div class="scoreboard" role="status" aria-atomic="true"><p class="score" id="score">答對 0 / 6 題</p><p class="message" id="message">已作答 0 / 6 題。從第一題開始吧！</p></div><div class="actions"><button class="primary" type="submit">檢查答案</button><button class="secondary" id="reset" type="button">重新作答</button></div></form></section>
+<footer>可離線練習，無需登入。作答結果不會傳送給老師；關閉或重新載入網頁後，請重新作答。</footer>
+</main>
+<script>
+'use strict';
+const questions = [
+ {before:'我',after:'游泳。',cue:'我上過游泳課，已經學會了。',answer:'會',explain:'這裡要說「學過，知道怎麼做」，所以選「會」。'},
+ {before:'天氣預報說，明天',after:'下雨。',cue:'這裡要說明天可能發生的事。',answer:'會',explain:'這裡是在預測明天的天氣，所以選「會」。'},
+ {before:'我明天不用上班，',after:'跟你一起去。',cue:'這裡要說我明天有時間。',answer:'能',explain:'不用上班，有時間一起去，條件允許，所以選「能」。'},
+ {before:'我今天生病了，不',after:'去上課。',cue:'這裡要說身體不舒服，沒辦法去。',answer:'能',explain:'身體不舒服，今天的條件不允許，所以說「不能去上課」。'},
+ {before:'作業不多，我十分鐘就',after:'寫完。',cue:'這裡要說我有能力在十分鐘內完成。',answer:'能',explain:'這裡強調在十分鐘內做得到，所以選「能」。'},
+ {before:'她學了兩年中文，現在',after:'說中文了。',cue:'這裡要說她學過，知道怎麼說。',answer:'會',explain:'這裡強調學過中文、學會了，所以選「會」。'}
+];
+const answers = Array(questions.length).fill(null);
+const form = document.getElementById('quiz');
+const container = document.getElementById('questions');
+let showMissing = false;
+questions.forEach((q,i) => {
+ const field = document.createElement('fieldset');
+ field.id = `question-${i}`;
+ field.innerHTML = `<legend>第 ${i+1} 題</legend><p class="sentence" id="sentence-${i}">${q.before}<span class="blank" aria-label="空格">？</span>${q.after}</p><p class="cue" id="cue-${i}">（${q.cue}）</p><div class="choices" role="radiogroup" aria-labelledby="sentence-${i}" aria-describedby="cue-${i}">${['會','能'].map(word=>`<label class="choice"><input type="radio" name="q${i}" value="${word}" aria-describedby="feedback-${i}"><span>${word}</span></label>`).join('')}</div><div class="feedback" id="feedback-${i}" aria-live="polite" aria-atomic="true" hidden></div>`;
+ container.appendChild(field);
+});
+function renderFeedback(i) {
+ const q=questions[i], answer=answers[i], el=document.getElementById(`feedback-${i}`);
+ el.hidden = answer===null && !showMissing;
+ el.className='feedback';
+ if(answer===null) {
+  el.classList.add('pending'); el.textContent='還沒作答，請選「會」或「能」。'; return;
+ }
+ const correct=answer===q.answer;
+ if(!correct) el.classList.add('wrong');
+ const title=document.createElement('strong');
+ title.textContent=correct?'✓ 答對了！':`再想一想：這裡選「${q.answer}」更合適。`;
+ el.replaceChildren(title,document.createTextNode(q.explain));
+}
+function updateScore() {
+ const done=answers.filter(a=>a!==null).length;
+ const score=answers.filter((a,i)=>a===questions[i].answer).length;
+ document.getElementById('score').textContent=`答對 ${score} / ${questions.length} 題`;
+ let message=`已作答 ${done} / ${questions.length} 題。`;
+ if(done===0) message+='從第一題開始吧！';
+ else if(done<questions.length) message+=`還有 ${questions.length-done} 題，繼續加油！`;
+ else if(score===questions.length) message+='全部答對了！你分得很清楚。';
+ else message+='讀一讀解釋，再試試看答錯的題目。';
+ document.getElementById('message').textContent=message;
+}
+form.addEventListener('change',event=>{
+ const input=event.target;
+ if(!input.matches('input[type="radio"]')) return;
+ const i=Number(input.name.slice(1));
+ answers[i]=input.value; renderFeedback(i); updateScore();
+});
+form.addEventListener('submit',event=>{
+ event.preventDefault(); showMissing=true;
+ questions.forEach((_,i)=>renderFeedback(i)); updateScore();
+ const firstMissing=answers.indexOf(null);
+ if(firstMissing!==-1) document.querySelector(`[name="q${firstMissing}"]`).focus();
+});
+document.getElementById('reset').addEventListener('click',()=>{
+ form.reset(); answers.fill(null); showMissing=false;
+ questions.forEach((_,i)=>renderFeedback(i)); updateScore();
+ document.querySelector('[name="q0"]').focus();
+});
+</script>
+</body>
+</html>
