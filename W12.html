@@ -1,0 +1,712 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>語詞與語法練習</title>
+<style>
+:root{
+  --bg:#faf8f4; --card:#ffffff; --ink:#222; --sub:#6b6b6b; --line:#e4dfd5;
+  --accent:#2f5d62; --accent-soft:#e8f0ef;
+  --ok:#2e7d4f; --okbg:#e7f4ec; --bad:#b3402f; --badbg:#fbeae6;
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);
+  font-family:"Noto Sans TC","PingFang TC","Microsoft JhengHei",system-ui,sans-serif;
+  line-height:1.7;-webkit-text-size-adjust:100%}
+.wrap{max-width:680px;margin:0 auto;padding:20px 16px 60px}
+header{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;margin-bottom:20px}
+header h1{font-size:18px;margin:0;font-weight:600;cursor:pointer}
+.toggles{display:flex;gap:14px;font-size:14px;color:var(--sub)}
+.toggles label{display:flex;align-items:center;gap:5px;cursor:pointer}
+.card{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:22px}
+.intro{color:var(--sub);font-size:15px;margin:0 0 18px}
+.levels{display:grid;gap:12px}
+.level{display:block;width:100%;text-align:left;background:var(--card);border:1px solid var(--line);
+  border-radius:12px;padding:16px 18px;cursor:pointer;font:inherit;color:inherit}
+.level:hover{border-color:var(--accent)}
+.level b{font-size:18px}
+.level span{display:block;color:var(--sub);font-size:14px;margin-top:2px}
+.bar{height:4px;background:var(--line);border-radius:2px;overflow:hidden;margin-bottom:6px}
+.bar i{display:block;height:100%;background:var(--accent);transition:width .25s}
+.meta{display:flex;justify-content:space-between;color:var(--sub);font-size:13px;margin-bottom:14px}
+.prompt{font-size:22px;line-height:1.8;margin:6px 0 4px}
+.word{font-size:34px;font-weight:600;letter-spacing:.05em}
+.py{color:var(--sub);font-size:15px;font-weight:400;letter-spacing:0}
+.en{color:var(--sub);font-size:14px;font-weight:400;letter-spacing:0}
+.hint{color:var(--sub);font-size:14px;margin:0 0 4px}
+.blank{display:inline-block;min-width:3em;border-bottom:2px solid var(--ink);text-align:center;color:transparent;user-select:none}
+.opts{display:grid;gap:10px;margin-top:18px}
+.opt{display:flex;gap:12px;align-items:flex-start;width:100%;text-align:left;font:inherit;color:inherit;
+  background:var(--card);border:1.5px solid var(--line);border-radius:10px;padding:12px 14px;cursor:pointer}
+.opt:hover:not(:disabled){border-color:var(--accent)}
+.opt .n{flex:none;width:22px;height:22px;border-radius:50%;background:var(--accent-soft);color:var(--accent);
+  font-size:13px;display:flex;align-items:center;justify-content:center;margin-top:2px}
+.opt.ok{border-color:var(--ok);background:var(--okbg)}
+.opt.bad{border-color:var(--bad);background:var(--badbg)}
+.opt:disabled{cursor:default}
+.opt .t{flex:1}
+.fb{margin-top:18px;padding:14px 16px;border-radius:10px;font-size:15px}
+.fb.ok{background:var(--okbg)} .fb.bad{background:var(--badbg)}
+.fb .h{font-weight:600;margin-bottom:4px}
+.fb em{font-style:normal;background:#fff3b0;padding:0 2px;border-radius:3px}
+.btn{font:inherit;border:0;border-radius:10px;padding:10px 20px;background:var(--accent);color:#fff;cursor:pointer;margin-top:16px}
+.btn.ghost{background:transparent;color:var(--accent);border:1.5px solid var(--accent)}
+.row{display:flex;gap:10px;flex-wrap:wrap}
+.score{font-size:30px;font-weight:600;margin:4px 0 12px}
+ul.miss{padding-left:20px;margin:8px 0 0;font-size:15px}
+ul.miss li{margin-bottom:6px}
+footer{margin-top:28px;color:var(--sub);font-size:12px;text-align:center}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <h1 id="home">語詞與語法練習</h1>
+    <div class="toggles">
+      <label><input type="checkbox" id="tpy"> 拼音</label>
+      <label><input type="checkbox" id="ten"> 英文</label>
+    </div>
+  </header>
+  <div id="app"></div>
+  <footer>資料在檔案最上方的 LESSON 區塊；換課文只需修改那一段。</footer>
+</div>
+
+<script>
+/* ================= LESSON 資料區（每週只需改這裡）=================
+   words[].s   ：例句。t 為完整句子（句中必須含該詞），d 為兩個「明顯不適合」的干擾詞。
+                 標 new:true 的是補充例句，其餘改寫自課文對話；請老師審閱。
+   words[].near：初階題的干擾定義會避開這些詞（近義詞，避免兩個選項都說得通）。
+   grammar[]   ：留空陣列則不顯示進階。有語法時：t="fill" 填空選句型；t="sent" 選出用法正確的句子。 */
+const LESSON = {
+ "title": "本週課文",
+ "words": [
+  {
+   "w": "算命",
+   "py": "suànmìng",
+   "en": "fortune-telling",
+   "def": "用各種方法預測一個人的個性或未來。",
+   "near": [
+    "星座",
+    "八字",
+    "塔羅",
+    "預測"
+   ],
+   "s": [
+    {
+     "t": "我朋友很喜歡去廟裡算命，想知道今年的工作順不順利。",
+     "d": [
+      "逃避",
+      "統計"
+     ],
+     "new": true
+    },
+    {
+     "t": "有人相信算命，有人覺得那只是好玩。",
+     "d": [
+      "逃避",
+      "涵蓋"
+     ],
+     "new": true
+    }
+   ]
+  },
+  {
+   "w": "星座",
+   "py": "xīngzuò",
+   "en": "zodiac sign",
+   "def": "根據生日分成的十二種性格分類。",
+   "near": [
+    "算命",
+    "八字",
+    "塔羅"
+   ],
+   "s": [
+    {
+     "t": "你是不是又要跟我說星座運勢？",
+     "d": [
+      "統計學",
+      "務實"
+     ]
+    },
+    {
+     "t": "我是十月出生的，我的星座是天秤座。",
+     "d": [
+      "統計",
+      "涵蓋"
+     ],
+     "new": true
+    }
+   ]
+  },
+  {
+   "w": "旺",
+   "py": "wàng",
+   "en": "prosperous / lucky",
+   "def": "運氣好、順利。",
+   "near": [
+    "運勢"
+   ],
+   "s": [
+    {
+     "t": "你今天如果穿橘色衣服，運勢會很旺喔。",
+     "d": [
+      "務實",
+      "迷信"
+     ]
+    },
+    {
+     "t": "聽說今年他的財運很旺，做什麼都很順利。",
+     "d": [
+      "務實",
+      "迷信"
+     ],
+     "new": true
+    }
+   ]
+  },
+  {
+   "w": "八字",
+   "py": "bāzì",
+   "en": "Four Pillars of Destiny",
+   "def": "依照出生時間算命的一種方法。",
+   "near": [
+    "算命",
+    "星座",
+    "塔羅"
+   ],
+   "s": [
+    {
+     "t": "要算八字，一定要知道出生的年、月、日和時間。",
+     "d": [
+      "逃避",
+      "務實"
+     ],
+     "new": true
+    },
+    {
+     "t": "我奶奶說，八字不好的人要常常拜拜。",
+     "d": [
+      "逃避",
+      "涵蓋"
+     ],
+     "new": true
+    }
+   ]
+  },
+  {
+   "w": "塔羅",
+   "py": "tǎluó",
+   "en": "tarot",
+   "def": "用卡片解讀問題的方式。",
+   "near": [
+    "算命",
+    "星座",
+    "八字"
+   ],
+   "s": [
+    {
+     "t": "她用塔羅牌幫朋友解讀感情問題。",
+     "d": [
+      "星座",
+      "八字"
+     ],
+     "new": true
+    },
+    {
+     "t": "桌上有一副塔羅牌，你可以抽一張看看。",
+     "d": [
+      "星座",
+      "八字"
+     ],
+     "new": true
+    }
+   ]
+  },
+  {
+   "w": "預測",
+   "py": "yùcè",
+   "en": "predict",
+   "def": "先說出未來可能發生的事情。",
+   "near": [
+    "算命"
+   ],
+   "s": [
+    {
+     "t": "不是每個人的命運都可以預測。",
+     "d": [
+      "涵蓋",
+      "務實"
+     ]
+    },
+    {
+     "t": "氣象局預測明天會下大雨。",
+     "d": [
+      "逃避",
+      "涵蓋"
+     ],
+     "new": true
+    }
+   ]
+  },
+  {
+   "w": "涵蓋",
+   "py": "hángài",
+   "en": "include / cover",
+   "def": "包含很多不同的部分。",
+   "near": [],
+   "s": [
+    {
+     "t": "只用十二種性格，就想涵蓋所有的人。",
+     "d": [
+      "逃避",
+      "務實"
+     ]
+    },
+    {
+     "t": "這門課涵蓋了歷史、文學和藝術。",
+     "d": [
+      "逃避",
+      "務實"
+     ],
+     "new": true
+    }
+   ]
+  },
+  {
+   "w": "妄想",
+   "py": "wàngxiǎng",
+   "en": "delusion / unrealistic thinking",
+   "def": "不太可能發生的想法。",
+   "near": [
+    "迷信",
+    "無稽之談",
+    "心理作用"
+   ],
+   "s": [
+    {
+     "t": "只用十二種性格就想分類所有人，根本是妄想。",
+     "d": [
+      "務實",
+      "參考"
+     ]
+    },
+    {
+     "t": "他沒有努力工作，只想一夜變成有錢人，這是妄想。",
+     "d": [
+      "統計",
+      "涵蓋"
+     ],
+     "new": true
+    }
+   ]
+  },
+  {
+   "w": "逃避",
+   "py": "táobì",
+   "en": "avoid / escape",
+   "def": "不想面對某件事。",
+   "near": [],
+   "s": [
+    {
+     "t": "他害怕失敗，所以一直逃避改變。",
+     "d": [
+      "算命",
+      "涵蓋"
+     ]
+    },
+    {
+     "t": "有問題就要面對，不要一直逃避。",
+     "d": [
+      "涵蓋",
+      "統計"
+     ],
+     "new": true
+    }
+   ]
+  },
+  {
+   "w": "運勢",
+   "py": "yùnshì",
+   "en": "fortune / luck",
+   "def": "一段時間的好運或壞運。",
+   "near": [
+    "旺"
+   ],
+   "s": [
+    {
+     "t": "你今天如果穿橘色衣服，運勢會很旺喔。",
+     "d": [
+      "星座",
+      "統計"
+     ]
+    },
+    {
+     "t": "這個星期他的運勢不太好，常常遇到不順利的事。",
+     "d": [
+      "統計",
+      "務實"
+     ],
+     "new": true
+    }
+   ]
+  },
+  {
+   "w": "無稽之談",
+   "py": "wújī zhī tán",
+   "en": "nonsense / groundless talk",
+   "def": "沒有根據的話，完全不可信。",
+   "near": [
+    "迷信",
+    "妄想"
+   ],
+   "s": [
+    {
+     "t": "算命這種事根本是無稽之談。",
+     "d": [
+      "逃避",
+      "務實"
+     ]
+    },
+    {
+     "t": "新聞說吃這個東西就能一夜變瘦，這根本是無稽之談。",
+     "d": [
+      "統計學",
+      "務實"
+     ],
+     "new": true
+    }
+   ]
+  },
+  {
+   "w": "統計",
+   "py": "tǒngjì",
+   "en": "statistics / data counting",
+   "def": "把資料整理、計算後得到的數字。",
+   "near": [
+    "統計學"
+   ],
+   "s": [
+    {
+     "t": "老師把全班的考試成績統計出來，平均是七十五分。",
+     "d": [
+      "逃避",
+      "涵蓋"
+     ],
+     "new": true
+    },
+    {
+     "t": "根據統計，台灣每年有很多人去算命。",
+     "d": [
+      "逃避",
+      "涵蓋"
+     ],
+     "new": true
+    }
+   ]
+  },
+  {
+   "w": "統計學",
+   "py": "tǒngjìxué",
+   "en": "statistics as a discipline",
+   "def": "研究如何分析資料與數據的學科。",
+   "near": [
+    "統計"
+   ],
+   "s": [
+    {
+     "t": "這些資料是根據統計學累積出來的。",
+     "d": [
+      "逃避",
+      "務實"
+     ]
+    },
+    {
+     "t": "他大學念的是統計學，很會分析數據。",
+     "d": [
+      "逃避",
+      "務實"
+     ],
+     "new": true
+    }
+   ]
+  },
+  {
+   "w": "心理作用",
+   "py": "xīnlǐ zuòyòng",
+   "en": "psychological effect",
+   "def": "因為情緒或想法而產生的感覺或反應，不一定是真實原因。",
+   "near": [
+    "妄想"
+   ],
+   "s": [
+    {
+     "t": "那是心理作用吧？你覺得運氣好，你就比較敢做事。",
+     "d": [
+      "八字",
+      "塔羅"
+     ]
+    },
+    {
+     "t": "他說吃了這個藥就好了，其實只是心理作用。",
+     "d": [
+      "八字",
+      "塔羅"
+     ],
+     "new": true
+    }
+   ]
+  },
+  {
+   "w": "務實",
+   "py": "wùshí",
+   "en": "practical",
+   "def": "做事注重實際、不誇張。",
+   "near": [],
+   "s": [
+    {
+     "t": "你講話怎麼這麼務實？完全不浪漫欸。",
+     "d": [
+      "預測",
+      "統計"
+     ]
+    },
+    {
+     "t": "他做事很務實，不會說太多漂亮的話。",
+     "d": [
+      "預測",
+      "統計"
+     ],
+     "new": true
+    }
+   ]
+  },
+  {
+   "w": "參考",
+   "py": "cānkǎo",
+   "en": "reference",
+   "def": "把某件事當作提醒或方向，但不一定完全照做。",
+   "near": [],
+   "s": [
+    {
+     "t": "星座只是參考，不用完全照著做。",
+     "d": [
+      "涵蓋",
+      "務實"
+     ]
+    },
+    {
+     "t": "這只是我的意見，你聽聽就好，可以當作參考。",
+     "d": [
+      "涵蓋",
+      "統計"
+     ],
+     "new": true
+    }
+   ]
+  },
+  {
+   "w": "迷信",
+   "py": "míxìn",
+   "en": "superstition",
+   "def": "過度相信沒有科學根據的事情。",
+   "near": [
+    "無稽之談",
+    "妄想"
+   ],
+   "s": [
+    {
+     "t": "他太迷信了，每天都要看運勢才敢出門。",
+     "d": [
+      "統計",
+      "涵蓋"
+     ],
+     "new": true
+    },
+    {
+     "t": "科學上沒有證據，如果過度相信，就變成迷信了。",
+     "d": [
+      "統計",
+      "涵蓋"
+     ],
+     "new": true
+    }
+   ]
+  }
+ ],
+ "grammar": []
+};
+/* ================= 以下為程式，不需修改 ================= */
+
+const $ = s => document.querySelector(s);
+const esc = s => String(s).replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const shuffle = a => { a = a.slice(); for (let i = a.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [a[i], a[j]] = [a[j], a[i]]; } return a; };
+const ALL_LEVELS = [
+  {id:1, name:"初階", desc:"詞義：三選一，選出這個詞的意思", n:() => LESSON.words.length},
+  {id:2, name:"中階", desc:"用法：看例句，選出該填入的詞", n:() => LESSON.words.length},
+  {id:3, name:"進階", desc:"語法：選出正確的句型用法", n:() => LESSON.grammar.length}
+];
+const LEVELS = ALL_LEVELS.filter(l => l.id !== 3 || LESSON.grammar.length);
+
+let prefs = {py:true, en:false};
+try { Object.assign(prefs, JSON.parse(localStorage.getItem('prefs') || '{}')); } catch (e) {}
+let run = null;
+
+function savePrefs(){ try { localStorage.setItem('prefs', JSON.stringify(prefs)); } catch (e) {} }
+
+/* ---------- 題目產生 ---------- */
+function buildQ(level, id, lastSent){
+  const W = LESSON.words;
+  if (level === 1) {
+    const w = W[id];
+    const isNear = o => (w.near || []).includes(o.w) || (o.near || []).includes(w.w);
+    const others = shuffle(W.filter((o, i) => i !== id && !isNear(o))).slice(0, 2);
+    const options = shuffle([{text:w.def, correct:true}, ...others.map(o => ({text:o.def, correct:false}))]);
+    return {
+      promptFn: () => `<div class="hint">這個詞是什麼意思？</div><div class="prompt"><span class="word">${esc(w.w)}</span>
+        ${prefs.py ? `<span class="py"> ${esc(w.py)}</span>` : ''}${prefs.en ? `<span class="en"> ${esc(w.en)}</span>` : ''}</div>`,
+      options,
+      fb: `<b>${esc(w.w)}</b>（${esc(w.py)}）：${esc(w.def)}<br>例：${esc(w.s[0].t)}`,
+      label: `${w.w}：${w.def}`
+    };
+  }
+  if (level === 2) {
+    const w = W[id];
+    let k = Math.floor(Math.random() * w.s.length);
+    if (w.s.length > 1 && k === lastSent) k = (k + 1) % w.s.length;
+    const s = w.s[k];
+    const byWord = x => W.find(o => o.w === x);
+    const mk = (o, correct) => ({text:o.w, py:o.py, en:o.en, correct});
+    const options = shuffle([mk(w, true), ...s.d.map(x => mk(byWord(x), false))]);
+    const blank = esc(s.t).replace(esc(w.w), '<span class="blank">＿＿＿</span>');
+    const full = esc(s.t).replace(esc(w.w), `<em>${esc(w.w)}</em>`);
+    return {
+      sent: k,
+      prompt: `<div class="hint">選出最適合填入空格的詞</div><div class="prompt">${blank}</div>`,
+      options,
+      fb: `${full}<br><b>${esc(w.w)}</b>：${esc(w.def)}`,
+      label: s.t
+    };
+  }
+  const g = LESSON.grammar[id];
+  const options = shuffle(g.o.map((t, i) => ({text:t, correct:i === 0})));
+  if (g.t === 'fill') {
+    return {
+      prompt: `<div class="hint">選出適合填入空格的句型</div><div class="prompt">${esc(g.q).replace(/＿＿＿/g, '<span class="blank">＿＿＿</span>')}</div>`,
+      options,
+      fb: `${esc(g.full)}<br>${esc(g.note)}`,
+      label: g.full
+    };
+  }
+  return {
+    prompt: `<div class="hint">哪一句「${esc(g.p)}」用得正確？</div>`,
+    options,
+    fb: `正確：${esc(g.o[0])}<br>${esc(g.note)}`,
+    label: g.o[0]
+  };
+}
+
+/* ---------- 畫面 ---------- */
+function home(){
+  run = null;
+  $('#app').innerHTML = `<div class="card">
+    <p class="intro">${esc(LESSON.title)}：${LESSON.words.length} 個詞語${LESSON.grammar.length ? `、${new Set(LESSON.grammar.map(g => g.p)).size} 個語法` : ''}。
+    答錯的題目會再出現，直到答對為止。沒有計時，也沒有分數排行。</p>
+    <div class="levels">${LEVELS.map(l => `<button class="level" data-level="${l.id}"><b>${l.name}</b><span>${l.desc}（${l.n()} 題）</span></button>`).join('')}</div>
+  </div>`;
+}
+
+function start(level, ids){
+  ids = ids || (level === 3 ? LESSON.grammar : LESSON.words).map((_, i) => i);
+  run = {level, ids:ids.slice(), queue:shuffle(ids), total:ids.length, done:0, first:{}, last:{}, answered:false, q:null, cur:null};
+  next();
+}
+
+function next(){
+  if (!run.queue.length) return result();
+  run.cur = run.queue.shift();
+  run.q = buildQ(run.level, run.cur, run.last[run.cur]);
+  run.last[run.cur] = run.q.sent;
+  run.answered = false;
+  renderQ(-1);
+}
+
+function renderQ(picked){
+  const q = run.q;
+  const lv = LEVELS[run.level - 1];
+  const opts = q.options.map((o, i) => {
+    let cls = 'opt';
+    if (run.answered) cls += o.correct ? ' ok' : (i === picked ? ' bad' : '');
+    let inner = esc(o.text);
+    if (run.level === 2) {
+      const extra = [prefs.py ? o.py : '', prefs.en ? o.en : ''].filter(Boolean).join(' · ');
+      inner = `<span style="font-size:20px">${esc(o.text)}</span>${extra ? ` <span class="py">${esc(extra)}</span>` : ''}`;
+    }
+    return `<button class="${cls}" data-i="${i}" ${run.answered ? 'disabled' : ''}><span class="n">${i + 1}</span><span class="t">${inner}</span></button>`;
+  }).join('');
+  let fb = '';
+  if (run.answered) {
+    const ok = q.options[picked].correct;
+    fb = `<div class="fb ${ok ? 'ok' : 'bad'}"><div class="h">${ok ? '答對了' : '再想想，這題等一下會再出現'}</div>${q.fb}</div>
+      <button class="btn" id="next">下一題</button>`;
+  }
+  $('#app').innerHTML = `<div class="card">
+    <div class="bar"><i style="width:${run.done / run.total * 100}%"></i></div>
+    <div class="meta"><span>${lv.name}</span><span>已答對 ${run.done} / ${run.total}</span></div>
+    ${q.promptFn ? q.promptFn() : q.prompt}<div class="opts">${opts}</div>${fb}</div>`;
+}
+
+function answer(i){
+  if (run.answered) return;
+  run.answered = true;
+  const ok = run.q.options[i].correct;
+  if (run.first[run.cur] === undefined) run.first[run.cur] = ok;
+  if (ok) run.done++;
+  else run.queue.splice(Math.min(3, run.queue.length), 0, run.cur);
+  renderQ(i);
+}
+
+function result(){
+  const missed = run.ids.filter(id => run.first[id] === false);
+  const good = run.total - missed.length;
+  const missList = missed.map(id => `<li>${esc(buildQ(run.level, id).label)}</li>`).join('');
+  $('#app').innerHTML = `<div class="card">
+    <div class="hint">${LEVELS[run.level - 1].name}完成</div>
+    <div class="score">第一次就答對 ${good} / ${run.total}</div>
+    ${missed.length ? `<div>需要再看一下：<ul class="miss">${missList}</ul></div>` : '<div>全部第一次就答對。</div>'}
+    <div class="row">
+      ${missed.length ? `<button class="btn" id="redo-miss">只練答錯的</button>` : ''}
+      <button class="btn ${missed.length ? 'ghost' : ''}" id="redo-all">整組重練</button>
+      <button class="btn ghost" id="to-home">回首頁</button>
+    </div></div>`;
+  run.missedIds = missed;
+}
+
+/* ---------- 事件 ---------- */
+document.addEventListener('click', e => {
+  const t = e.target.closest('button, #home');
+  if (!t) return;
+  if (t.id === 'home' || t.id === 'to-home') return home();
+  if (t.dataset.level) return start(+t.dataset.level);
+  if (t.dataset.i !== undefined && run) return answer(+t.dataset.i);
+  if (t.id === 'next') return next();
+  if (t.id === 'redo-all') return start(run.level);
+  if (t.id === 'redo-miss') return start(run.level, run.missedIds);
+});
+document.addEventListener('keydown', e => {
+  if (!run || !run.q) return;
+  if (!run.answered && /^[1-3]$/.test(e.key)) return answer(+e.key - 1);
+  if (run.answered && (e.key === 'Enter' || e.key === ' ')) { e.preventDefault(); next(); }
+});
+['py', 'en'].forEach(k => {
+  const el = $('#t' + k);
+  el.checked = !!prefs[k];
+  el.addEventListener('change', () => {
+    prefs[k] = el.checked; savePrefs();
+    if (run && run.q && !run.answered) renderQ(-1);
+  });
+});
+home();
+</script>
+</body>
+</html>
